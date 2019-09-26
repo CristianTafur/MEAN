@@ -1,4 +1,5 @@
 const mongoose=require('mongoose'); 
+const Schema = mongoose.Schema;
 const factura= new Schema({
     numero:{type:String,require:true},
     linea:{type: String,require:true}, 

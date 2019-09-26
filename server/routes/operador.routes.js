@@ -1,5 +1,7 @@
 const router=require('express').Router();
-router.get('',(req,res)=>{
-res.json({mensaje:'tonces que bb'});
-});
+const persona=require('../controllers/persona.controller');
+router.get('/',persona.getpersonas);
+router.post('/',persona.createPersona);
+router.put('/',persona.updatePersona);
+router.delete('/',persona.deletePersona);
 module.exports=router;

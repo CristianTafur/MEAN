@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const Schema = mongoose.Schema;
 const persona= new Schema({
     cedula:{type:String,require:true},
     nombre:{type: String,require:true},

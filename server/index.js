@@ -21,5 +21,5 @@ app.use('/api/operador', require('./routes/operador.routes'));
 
 //inicar el servidor 
 app.listen(app.get('port'), () => {
-    console.log(`server on port ${app.get('port')}`);
+    console.log(`http://localhost:${app.get('port')}`);
 });
