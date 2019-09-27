@@ -1,7 +1,8 @@
-const Persona=require('../models/persona');
+const Persona=require('../models/persona'); 
 const personaCtrl={}; 
+
 personaCtrl.getpersonas=async(req,res)=>{
-  const personas=await Persona.find(/*{nombre: { $regex: '.*cristian.*' } }*/)/*.select('nombre cedula')*/;   
+    const personas=await Persona.find(/*{nombre: { $regex: '.*cristian.*' } }*/)/*.select('nombre cedula')*/;   
   /* await Persona.deleteMany({},(err)=>{
     if (err) {
         console.log(err);
@@ -10,13 +11,14 @@ personaCtrl.getpersonas=async(req,res)=>{
         console.log("elimino");
         
     }
-   });  */
-
+   });  */ 
     res.json(personas);
 }
 personaCtrl.createPersona=async(req,res)=>{
      
     const {cedula,nombre,apellido,date}=req.body; //recoje los datos del json
+     console.log("entro");
+     console.log(req.body);
      
     const persona=new Persona(
         {
@@ -24,6 +26,7 @@ personaCtrl.createPersona=async(req,res)=>{
             nombre:nombre,
             apellido:apellido,
             date:new Date(date)//genera una fecha apartir de un string, para este caso la fecha de nacimiento
+           
         }
     );//define estructura del documento
     persona.save(); //guarda en la base de datos
@@ -36,17 +39,21 @@ personaCtrl.getpersona=async (req,res)=>{
 
 } 
 personaCtrl.updatePersona=async (req,res)=>{
+    const {id}=req.params;//obtiene los parametros de la ruta
     const {cedula,nombre,apellido,date}=req.body; //recoje los datos del json
+     console.log(cedula);
      
-    const persona=new Persona(
+    const persona=
         {
             cedula:cedula,
             nombre:nombre,
             apellido:apellido,
             date:new Date(date)//genera una fecha apartir de un string, para este caso la fecha de nacimiento
         }
-    );//define estructura del documento
-    await Persona.findByIdAndUpdate(cedula, {$set: persona}, {new: true});//{new : true} es, por si se agrega algun dato demas que se desee actulizar lo cree por nosotros,(solo aplica para datos no requridos) 
+     //define estructura del documento
+    console.log(persona);
+    
+    await Persona.findByIdAndUpdate(id, {$set: persona}, {new: true});//{new : true} es, por si se agrega algun dato demas que se desee actulizar lo cree por nosotros,(solo aplica para datos no requridos) 
     res.json({status: 'Persona Updated'});
 }
 personaCtrl.deletePersona=async(req,res)=>{

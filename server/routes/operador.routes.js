@@ -1,7 +1,10 @@
 const router=require('express').Router();
 const persona=require('../controllers/persona.controller');
-router.get('/',persona.getpersonas);
-router.post('/',persona.createPersona);
-router.put('/',persona.updatePersona);
-router.delete('/',persona.deletePersona);
+const linea=require('../controllers/linea.controller');
+router.get('/persona',persona.getpersonas);
+router.post('/persona',persona.createPersona);
+router.put('/persona/:id',persona.updatePersona);
+router.delete('/persona/:id',persona.deletePersona);
+router.get('/linea',linea.createLiena);
+router.put('/linea/:id',linea.updateLinea);
 module.exports=router;
