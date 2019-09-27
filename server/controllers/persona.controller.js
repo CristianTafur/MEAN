@@ -1,8 +1,9 @@
 const Persona=require('../models/persona'); 
+const Linea=require('../models/liena');
 const personaCtrl={}; 
 
 personaCtrl.getpersonas=async(req,res)=>{
-    const personas=await Persona.find(/*{nombre: { $regex: '.*cristian.*' } }*/)/*.select('nombre cedula')*/;   
+    const personas=await Persona.find(/*{nombre: { $regex: '.*cristian.*' } }*/).select('cedula nombre apellido date');   
   /* await Persona.deleteMany({},(err)=>{
     if (err) {
         console.log(err);
@@ -30,7 +31,7 @@ personaCtrl.createPersona=async(req,res)=>{
         }
     );//define estructura del documento
     persona.save(); //guarda en la base de datos
-    res.json({status: 'Persona created'});//envia un json 
+    res.json(persona);//envia un json 
 }
 personaCtrl.getpersona=async (req,res)=>{
     const {cedula} =req.body;
@@ -57,7 +58,14 @@ personaCtrl.updatePersona=async (req,res)=>{
     res.json({status: 'Persona Updated'});
 }
 personaCtrl.deletePersona=async(req,res)=>{
-    await Persona.findByIdAndRemove(req.params.id);
+    const {id,cedula}=req.params;
+    await Persona.findByIdAndRemove(id);
+    const linea=await Linea.findOne({cedula});
+    console.log(linea); 
+    if (linea) {  
+        linea.persona="no"; 
+        await Linea.findOneAndUpdate(cedula,{$set:linea},{new:true});
+    }  
     res.json({status: 'Persona Deleted'});
 }
 

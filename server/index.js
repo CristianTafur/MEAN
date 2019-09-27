@@ -12,7 +12,7 @@ const { mongoose } = require('./database');
 app.set('port', process.env.PORT || 3000);
 
 // Middlewares (dependias o modulos que configuaran de maner "automatica", los permisos de servidor, el consumo y producion de JSON)
-app.use(cors({origin: 'http://localhost:4200'}));
+app.use(cors({origin: 'http://localhost:4200'},{origin:'http://localhost:4200/usuarios'}));
 app.use(express.json());
 //middlewares no necesarios para funcionamiento del API REST
 app.use(morgan('dev'));

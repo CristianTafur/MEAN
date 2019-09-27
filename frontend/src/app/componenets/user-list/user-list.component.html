@@ -1,1 +1,73 @@
-<p>user-list works!</p>
+<br><br>
+<div class="row">  
+   <div class="col-12">
+        <div class="container">
+           <table class="table">
+               <thead class="thead-dark" align="center">
+                   <tr>
+                       <th>
+                          numero
+                       </th> 
+                       <th>
+                            cedula
+                        </th> 
+                        <th>
+                            nombre
+                        </th>
+                        <th>
+                            apellido
+                        </th>
+                        <th>
+                            cumpleaños
+                        
+                        </th>
+                        <th colspan="2">
+                            configuraciones
+                        </th>
+                   </tr> 
+               </thead>
+               <tbody  align="center">
+                   <tr>
+                       <td>{{num}}</td>
+                       <td><input id={{cedula}}{{num}} class="form-control" type="number" placeholder={{cedula}} required></td>
+                       <td><input id={{nombre}}{{num}} class="form-control" type="text" placeholder={{nombre}} required></td>
+                       <td><input id={{apellido}}{{num}} class="form-control" type="text" placeholder={{apellido}} required></td>
+                       <td><input id={{date}}{{num}} class="form-control" type="date" required></td>
+                       <td colspan="2"><button class="btn btn-outline-success m-2 btn-block" (click)="setPersona(num)">guardar</button></td>
+                   </tr>
+                  <tr *ngFor="let value of persona.personas; let i=index">
+                      <td>
+                         {{i}}
+                      </td>
+                  
+                        <td>
+                          <p *ngIf="!value.estado" > {{value.cedula}}</p>
+                            <input *ngIf="value.estado" id={{cedula}}{{i}} class="form-control" type="number" disabled value={{value.cedula}} required>
+                        </td>
+                  
+                            <td>
+                              <p *ngIf="!value.estado"> {{value.nombre}}</p>
+                               <input *ngIf="value.estado" id={{nombre}}{{i}} class="form-control" type="text" value={{value.nombre}} required>
+                            </td>
+                            <td>
+                                <p *ngIf="!value.estado"> {{value.apellido}}</p>
+                                 <input *ngIf="value.estado" id={{apellido}}{{i}} class="form-control" type="text" value={{value.apellido}} required>
+                              </td>
+                              <td>
+                                <p *ngIf="!value.estado"> {{value.date}}</p>
+                                 <input *ngIf="value.estado" id={{date}}{{i}} class="form-control" type="date" value={{value.date}} required>
+                              </td>
+                            <td>
+                                <button *ngIf="!value.estado" class="btn btn-outline-primary m-2 btn-block" (click)="editar(i)">editar</button>
+                                <button *ngIf="value.estado" class="btn btn-outline-success m-2 btn-block" (click)="putUser(i)">guardar</button>
+                            </td>
+                            <td>
+                                <button *ngIf="!value.estado" class="btn btn-outline-danger m-2 btn-block" (click)="deleteUser(i)">eliminar</button>
+                                <button *ngIf="value.estado" class="btn btn-outline-danger m-2 btn-block" (click)="editar(i)">cancelar</button>
+                            </td>
+                 </tr>
+               </tbody>
+           </table>
+        </div>
+   </div>
+</div>

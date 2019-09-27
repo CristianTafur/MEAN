@@ -9,7 +9,8 @@ import { SingComponent } from './componenets/sing/sing.component';
 import { UserListComponent } from './componenets/user-list/user-list.component';
 import { UserListFacturesComponent } from './componenets/user-list-factures/user-list-factures.component';
 import { HomeComponent } from './componenets/home/home.component';
-import { Page404Component } from './componenets/page404/page404.component';
+import { Page404Component } from './componenets/page404/page404.component'; 
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,12 @@ import { Page404Component } from './componenets/page404/page404.component';
     UserListComponent,
     UserListFacturesComponent,
     HomeComponent,
-    Page404Component
+    Page404Component 
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
