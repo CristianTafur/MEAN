@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <a class="navbar-brand text-white" href="/">Cliente REST</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto"></ul>
+    <!--  <form action="/buscar" class="form-inline my-2 my-lg-0" method="GET"> 
+                        <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Search">
+                        <button class="btn btn-dark my-2 my-sm-0 text-white" type="submit">Buscar</button>
+                      </form>-->
+    
+        <form *ngIf="true" class="form-inline my-2 my-lg-0">
+          <a
+            href="#"
+            class="btn btn-dark ml-2"
+            data-toggle="modal"
+            data-target="#mimodal1"
+            >ingresar</a
+          >
+        </form>
+        <form *ngIf="true" class="form-inline my-2 my-lg-0">
+          <a
+            href="#"
+            class="btn btn-dark ml-2"
+            data-toggle="modal"
+            data-target="#mimodal2"
+            >Registrar</a
+          >
+        </form>
+    
+    <!-- <a href="/cerrar" class="btn btn-dark ml-2" >cerrar sesion</a> -->
+  </div>
+</nav>
