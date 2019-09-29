@@ -5,6 +5,6 @@ const equipo= new Schema({
    numero:{type:String},
    marca:{type:String},
    descripcion:{type:String},
-   estado:{type:String}
+   estado:{type:String,default:'no reportado'}
 });
 module.exports = mongoose.model('equipo', equipo);

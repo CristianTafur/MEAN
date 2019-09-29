@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { OperadorService } from 'src/app/services/operador.service';
 import { Persona } from 'src/app/models/persona'; 
 import Swal from 'sweetalert2';
-
+import { Linea } from 'src/app/models/linea';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -14,12 +15,18 @@ export class UserListComponent implements OnInit {
   nombre:string;
   apellido:string;
   date:string;
-
+  modal:string;
+  linea:string;
+  existente:boolean;
+  
   constructor(private persona:OperadorService) {
     this.cedula="cedula";
     this.nombre="nombre";
     this.apellido="apellido";
-    this.date="date"
+    this.date="date";
+    this.linea="linea";
+    this.modal="modal";
+    this.existente=false;
   }
 
   ngOnInit() {
@@ -31,6 +38,8 @@ export class UserListComponent implements OnInit {
       
       this.persona.personas.forEach(persona => {
         persona.estado=false; 
+        persona.configuraciones=false;
+        persona.linea=false;
         persona.date=persona.date.split('T')[0];
        });
        this.num=this.persona.personas.length;   
@@ -53,6 +62,8 @@ export class UserListComponent implements OnInit {
         this.persona.setPersona().subscribe(res =>{
         let persona=<Persona>res;
         persona.estado=false;  
+        persona.configuraciones=false;
+        persona.linea=false;
         persona.date=date.split('T')[0];
         this.persona.personas.push(persona); 
         this.obtnerDOM(this.cedula+id).value="";
@@ -109,7 +120,9 @@ export class UserListComponent implements OnInit {
           this.persona.persona.date=date;
           this.persona.putPersona().subscribe(res=>{ 
             this.persona.personas[id]=this.persona.persona;
-            this.persona.personas[id].estado=false;
+            this.persona.personas[id].linea=false;
+            this.persona.personas[id].configuraciones=false;
+            this.persona.personas[id].estado=false; 
           // this.getUser(); 
             Swal.fire(
               'editado!',
@@ -152,11 +165,105 @@ export class UserListComponent implements OnInit {
       }
     })  
   }
-
-  obtnerDOM(id :string){
-    return (<HTMLInputElement>document.getElementById(id));
+ getLineasDisponibles(alertas:boolean){
+     this.persona.getLineasDisponibles().subscribe(res=>{
+       if (res) {
+         this.persona.lineas=res as Linea[];
+         console.log(this.persona.lineas);
+         this.existente=true;
+         if (this.persona.lineas.length<1) {
+          // this.obtnerDOM("existente").checked=false;
+           this.existente=false;
+           if (alertas) {
+               Swal.fire(
+              'alerta!',
+              'no existe ninguna linea registrada por favor agrege una.',
+              'warning'
+             ) 
+           }
+        
+         }else{
+            if (alertas) {
+            Swal.fire(
+              'encontrado!',
+              'se han encontrado lineas disponibles.',
+              'success'
+            )
+          }
+         }  
+       } 
+     });
+   }
+   setLinea(form?: NgForm){
+     let numero= ""+form.value.numero;
+     if (numero.length>9) {
+      this.persona.linea.numero=numero;
+      //console.log(this.persona.linea); 
+      //this.existente=!this.existente;
+      //this.obtnerDOM("existente").checked=false;
+      this.persona.getLinea().subscribe(res=>{
+        this.persona.lineas=res as Linea[];
+        let linea=this.persona.lineas.find(linea=>linea.numero == numero);
+        console.log(this.persona.linea);
+        
+        let estado;
+        if (linea!=null) {
+          estado=linea.estado!="activa"; 
+          if (estado) {
+            this.persona.setLinea().subscribe(res=>{
+              Swal.fire(
+                'asociado!',
+                'se ha asociado la linea al usuario.',
+                'success'
+              ) 
+            });
+          }else{
+            Swal.fire(
+              'alerta!',
+              'la liena ya esta asociada, digite una linea diferente.',
+              'warning'
+            ) 
+          }
+        }else{
+         this.persona.setLinea().subscribe(res=>{
+          Swal.fire(
+            'asociado!',
+            'se ha creado y asociado la linea al usuario.',
+            'success'
+          ) 
+         });
+        }
+      });  
+     }else{
+      Swal.fire(
+        'alerta!',
+        'el numero debe ser de 10 digitos.',
+        'warning'
+      ) 
+     } 
+   }
+  obtnerDOM(id :string){ 
+    return (<HTMLInputElement>document.getElementById(id)); 
+   }
+   obtnerDOMByName(name :string){ 
+    return (<HTMLInputElement>document.getElementsByName(name)[0]); 
    }
    editar(id: number){ 
      this.persona.personas[id].estado=!this.persona.personas[id].estado; 
    }
+   configurarPersona(id: number){ 
+    this.persona.personas[id].configuraciones=!this.persona.personas[id].configuraciones; 
+   }
+   configurarLinea(id: number){ 
+    this.persona.personas[id].linea=!this.persona.personas[id].linea; 
+   }
+    
+
+   asociarLinea(persona:Persona){    
+     this.persona.linea.persona=persona.cedula;
+     this.getLineasDisponibles(true);
+     //console.log(this.obtnerDOMByName("cedula").value=persona.cedula); 
+    //this.obtnerDOM(this.cedula+(this.num+1)).value=persona.cedula;
+   }
+  
 }

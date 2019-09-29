@@ -4,12 +4,16 @@ export class Persona {
     nombre:string;
     apellido:string;
     date:String;
-    estado:boolean;
+    configuraciones:boolean;
+    linea:boolean;
+    estado:boolean; 
     constructor(){ 
         this._id="";
         this.cedula="";
         this.nombre="";
         this.apellido="";
         this.estado=false;
+        this.configuraciones=false;
+        this.linea=false;
     }
 }

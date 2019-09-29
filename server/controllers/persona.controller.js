@@ -1,5 +1,5 @@
 const Persona=require('../models/persona'); 
-const Linea=require('../models/liena');
+const Linea=require('../models/linea');
 const personaCtrl={}; 
 
 personaCtrl.getpersonas=async(req,res)=>{
@@ -60,11 +60,13 @@ personaCtrl.updatePersona=async (req,res)=>{
 personaCtrl.deletePersona=async(req,res)=>{
     const {id,cedula}=req.params;
     await Persona.findByIdAndRemove(id);
-    const linea=await Linea.findOne({cedula});
+    var linea=await Linea.find({cedula});
     console.log(linea); 
-    if (linea) {  
-        linea.persona="no"; 
-        await Linea.findOneAndUpdate(cedula,{$set:linea},{new:true});
+    if (linea.length>0) {  
+        linea=linea[0];
+        linea.persona="null";
+        linea.estado="suspendida"; 
+        await Linea.findByIdAndUpdate(linea._id,{$set:linea},{new:true});
     }  
     res.json({status: 'Persona Deleted'});
 }
