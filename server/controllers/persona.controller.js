@@ -1,5 +1,6 @@
 const Persona=require('../models/persona'); 
 const Linea=require('../models/linea');
+const Equipo=require('../models/equipo');
 const personaCtrl={}; 
 
 personaCtrl.getpersonas=async(req,res)=>{
@@ -66,11 +67,17 @@ personaCtrl.deletePersona=async(req,res)=>{
     
     //console.log(linea); 
     if (linea.length>0) {  
+        await linea.forEach(async value => { 
+             const e=await Equipo.deleteMany({numero:value.numero});
+             console.log("equipos eliminados");
+             console.log(e);  
+        }); 
         linea=linea[0];
         linea={
           persona:linea.persona="null",
           estado:linea.estado="suspendida" 
         } 
+       
         linea=await Linea.updateMany({persona},{$set:linea},{new:true});
         console.log("suspendida");
         

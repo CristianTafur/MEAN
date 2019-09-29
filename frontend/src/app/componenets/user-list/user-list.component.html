@@ -57,24 +57,33 @@
                                 <p *ngIf="!value.estado"> {{value.date}}</p>
                                  <input *ngIf="value.estado" id={{date}}{{i}} class="form-control" type="date" value={{value.date}} required>
                               </td>
-                              <td>
-                                    <button *ngIf="!value.configuraciones&&!value.linea" class="btn btn-outline-warning m-2 btn-block"  (click)="configurarLinea(i)"><i class="fas fa-signal"></i></button> <!--handshake,mobile-alt,signal,data-toggle="modal" data-target="#mimodal1"-->
-                                    <button id={{modal}}{{i}} *ngIf="value.linea" class="btn btn-outline-warning m-2 btn-block" data-toggle="modal" data-target="#mimodal1" (click)="asociarLinea(value)"> <i class="fas fa-handshake"></i></button>
+                              <td >
+                                    <button *ngIf="!value.linea&&!value.configuraciones" class="btn btn-outline-warning m-2 btn-block"  (click)="configurarLinea(i)"><i class="fas fa-signal"></i></button> <!--handshake,mobile-alt,signal,data-toggle="modal" data-target="#mimodal1"-->
+
+                                    <button  id={{modal}}{{i}} *ngIf="value.linea&&!value.poseeLinea" class="btn btn-outline-warning m-2 btn-block" data-toggle="modal" data-target="#mimodal1" (click)="asociarLinea(value)"> <i class="fas fa-handshake"></i></button>
+
+                                    <button id={{modal}}{{i}} *ngIf="value.linea&&value.poseeLinea" class="btn btn-outline-success m-2 btn-block" data-toggle="modal" data-target="#mimodal2"> <i class="fas fa-dollar-sign"></i></button>
+
                                     <button *ngIf="!value.estado&&value.configuraciones" class="btn btn-outline-primary m-2 btn-block" (click)="editar(i)"> <i class="fas fa-edit"></i></button>
+
                                     <button *ngIf="value.estado" class="btn btn-outline-success m-2 btn-block" (click)="putUser(i)"><i class="fas fa-save"></i></button>
                                 </td>
                                 <td>
                                     <button *ngIf="!value.configuraciones&&!value.linea" class="btn btn-outline-primary m-2 btn-block" (click)="configurarPersona(i)"><i class="fas fa-user-cog"></i></button>
-                                    <button id={{modal}}{{i}} *ngIf="value.linea" class="btn btn-outline-primary m-2 btn-block" data-toggle="modal" data-target="#mimodal2"> <i class="fas fa-mobile-alt"></i></button>
+                                   
                                     <button *ngIf="!value.estado&&value.configuraciones" class="btn btn-outline-danger m-2 btn-block" (click)="deleteUser(i)"><i class="fas fa-trash"></i></button>
+
                                     <button *ngIf="value.estado" class="btn btn-outline-danger m-2 btn-block" (click)="editar(i)"><i class="fas fa-window-close"></i></button> 
+
+                                   <button  *ngIf="value.linea"  class="btn btn-outline-danger m-2 btn-block" (click)="configurarLinea(i)"><i class="fas fa-window-close"></i></button>
+ 
                                  </td>
                                 <td *ngIf="!value.estado&&value.configuraciones">
                                         <button  class="btn btn-outline-danger m-2 btn-block" (click)="configurarPersona(i)"><i class="fas fa-window-close"></i></button>
                                 </td>
-                                <td *ngIf="!value.configuraciones&&value.linea">
-                                    <button  class="btn btn-outline-danger m-2 btn-block" (click)="configurarLinea(i)"><i class="fas fa-window-close"></i></button>
-                                </td>
+                                <!--<td *ngIf="true">
+                                    <button  *ngIf="true"  class="btn btn-outline-danger m-2 btn-block" (click)="configurarLinea(i)"><i class="fas fa-window-close"></i></button>
+                                </td>-->
                               
                  </tr>
                </tbody>
@@ -93,13 +102,21 @@
                          <p class="form-control" align="center">{{persona.linea.persona}}</p> 
                         <!-- <input type="checkbox" id="existente" (click)="getLineasDisponibles()">
                         <label for="existente">elejir existente</label><br>-->
+                        <label for="Numero">Serial: </label> 
+                        <p class="form-control" align="center">{{persona.linea.serial}}</p> 
+                        <label for="Numero">Marca: </label> 
+                        <input type="text" class="form-control" name="marca" #name="ngModel" [(ngModel)]="persona.linea.marca">
+
                         <label for="Numero">Numero: </label> 
-                        <input type="number" class="form-control" name="numero" #name="ngModel" [(ngModel)]="persona.linea.numero">
+                        <input type="number" class="form-control" name="numero1" #name="ngModel" [(ngModel)]="persona.linea.numero">
                         <label  *ngIf="existente" for="selecione">selecione un numero: </label> 
                         <select *ngIf="existente" class="form-control" name="numero" #numero="ngModel" [(ngModel)]="persona.linea.numero">
                            
                              <option *ngFor="let linea of persona.lineas" value={{linea.numero}}>{{linea.numero}}</option> 
-                        </select>  
+                        </select> 
+                        <label for="Numero">descripcion: </label> 
+                        <input type="text" class="form-control" name="descripcion" #name="ngModel" [(ngModel)]="persona.linea.descripcion">
+                        
                        </div> 
                         <div  class="modal-footer">
                        
@@ -111,6 +128,7 @@
                     </div>
                 </div>
             </div> 
+          
         </div>
    </div>
 </div>

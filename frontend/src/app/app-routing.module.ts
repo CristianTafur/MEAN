@@ -9,7 +9,7 @@ import { Page404Component } from './componenets/page404/page404.component';
 const routes: Routes = [
   {path:'',component:HomeComponent},
   {path:'usuarios',component:UserListComponent},
-  {path:'usuarios/facturas/:id',component:UserListFacturesComponent},
+  {path:'usuarios/facturas/:persona/:emision',component:UserListFacturesComponent},
   {path:'**',component:Page404Component}
 ];
 

@@ -32,6 +32,9 @@ export class OperadorService {
   getLineasDisponibles(){
     return this.http.get(this.url+"/lineasDisponibles");
   }
+  getLineasPersona(cedula){
+    return this.http.get(this.url+"/lineasPersona/"+cedula);
+  }
   setLinea(){
 
     return this.http.post(this.url+"/linea",this.linea);

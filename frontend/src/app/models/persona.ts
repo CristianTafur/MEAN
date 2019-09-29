@@ -7,6 +7,7 @@ export class Persona {
     configuraciones:boolean;
     linea:boolean;
     estado:boolean; 
+    poseeLinea:boolean;
     constructor(){ 
         this._id="";
         this.cedula="";
@@ -15,5 +16,6 @@ export class Persona {
         this.estado=false;
         this.configuraciones=false;
         this.linea=false;
+        this.poseeLinea=false;
     }
 }

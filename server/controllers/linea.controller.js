@@ -3,21 +3,21 @@ const Linea=require('../models/linea');
 const Equipo=require('../models/equipo');
 const lineaCtrl={}; 
 lineaCtrl.getLineas=async(req,res)=>{ 
-    //await Linea.deleteMany();
-    const linea=await Linea.find().select('numero persona estado');
+    //await Linea.deleteMany(); await Equipo.deleteMany();
+    const lineas=await Linea.find().select('numero persona estado');
     
-    res.json(linea);
+    res.json(lineas);
 }
 lineaCtrl.getLineasDisponibles=async(req,res)=>{ 
     //await Linea.deleteMany();
     const linea=await Linea.find({estado:'suspendida'}).select('numero estado');
-    console.log(linea);
+    //console.log(linea);
     
     res.json(linea);
 }
-lineaCtrl.getLineasUsuario=async(req,res)=>{ 
-    const {cedula}=req.params;
-    const linea=await Linea.find({$and:[{cedula},{estado:'activa'}]}).select('numero');
+lineaCtrl.getLineasPersona=async(req,res)=>{ 
+    const {persona}=req.params; 
+    const linea=await Linea.find({$and:[{persona},{estado:'activa'}]}).select('numero persona estado');
     res.json(linea);
 }
 lineaCtrl.createLinea=async(req,res)=>{
@@ -34,7 +34,7 @@ lineaCtrl.createLinea=async(req,res)=>{
    res.json(linea);//envia un json 
 }
 lineaCtrl.createLineaPersona=async(req,res)=>{
-    const {persona,numero}=req.body; //recoje los datos del json
+    const {persona,serial,marca,numero,descripcion}=req.body; //recoje los datos del json
     console.log("entradas:");
     console.log(req.body);
     var linea=await Linea.find({numero});
@@ -59,10 +59,19 @@ lineaCtrl.createLineaPersona=async(req,res)=>{
             persona,
             estado:"activa"
         });
-        linea.save();
+        await linea.save();
         console.log("creado");
         
     }
+    const equipo=new Equipo(
+        {serial,
+        numero,
+        marca,
+        descripcion,
+        estado:"no reportado"}
+    );
+    await equipo.save();
+    console.log("creado equipo");
    res.json({linea:'creada'});//envia un json 
 }
 lineaCtrl.updateLinea=async(req,res)=>{

@@ -4,6 +4,8 @@ import { Persona } from 'src/app/models/persona';
 import Swal from 'sweetalert2';
 import { Linea } from 'src/app/models/linea';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { headersToString } from 'selenium-webdriver/http';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -17,17 +19,19 @@ export class UserListComponent implements OnInit {
   date:string;
   modal:string;
   linea:string;
-  existente:boolean;
-  
-  constructor(private persona:OperadorService) {
+  existente:boolean; 
+
+  constructor(private persona:OperadorService,private router:Router) {
     this.cedula="cedula";
     this.nombre="nombre";
     this.apellido="apellido";
     this.date="date";
     this.linea="linea";
     this.modal="modal";
-    this.existente=false;
+    this.existente=false; 
   }
+    
+  
 
   ngOnInit() {
     this.getPersonas();
@@ -40,6 +44,7 @@ export class UserListComponent implements OnInit {
         persona.estado=false; 
         persona.configuraciones=false;
         persona.linea=false;
+        persona.poseeLinea=false;
         persona.date=persona.date.split('T')[0];
        });
        this.num=this.persona.personas.length;   
@@ -123,6 +128,7 @@ export class UserListComponent implements OnInit {
             this.persona.personas[id].linea=false;
             this.persona.personas[id].configuraciones=false;
             this.persona.personas[id].estado=false; 
+            this.persona.personas[id].poseeLinea=false;
           // this.getUser(); 
             Swal.fire(
               'editado!',
@@ -165,7 +171,7 @@ export class UserListComponent implements OnInit {
       }
     })  
   }
- getLineasDisponibles(alertas:boolean){
+ getLineasDisponibles(alertas:boolean){ 
      this.persona.getLineasDisponibles().subscribe(res=>{
        if (res) {
          this.persona.lineas=res as Linea[];
@@ -194,10 +200,65 @@ export class UserListComponent implements OnInit {
        } 
      });
    }
+   getLineasPersona(alertas:boolean,id:number){
+     let cedula;
+     if (id!=null) {
+       cedula= this.persona.personas[id].cedula;
+     }
+   
+      this.persona.getLineasPersona(cedula).subscribe(res=>{
+       if (res) {
+         this.persona.lineas=res as Linea[];
+        console.log(this.persona.lineas);
+         this.existente=true;
+         if (this.persona.lineas.length<1) {
+          // this.obtnerDOM("existente").checked=false;
+          this.persona.personas[id].poseeLinea=false;
+           this.existente=false;
+           if (alertas) {
+               Swal.fire(
+              'alerta!',
+              'no existe ninguna linea registrada por favor agrege una.',
+              'warning'
+             ) 
+           }
+        
+         }else{ 
+          this.persona.personas[id].poseeLinea=true;
+            if (alertas) { 
+            Swal.fire(
+              'encontrado!',
+              'se han encontrado lineas disponibles.',
+              'success'
+            )
+          }
+         }  
+        
+       } 
+     });
+     
+  }
    setLinea(form?: NgForm){
-     let numero= ""+form.value.numero;
-     if (numero.length>9) {
+    let marca= ""+form.value.marca;
+    let numero;
+    if (form.value.numero) {
+         numero= ""+form.value.numero;
+      console.log(numero+" normal");
+    }else{
+      numero= ""+form.value.numero1;
+      console.log(numero+" no normla");
+   
+      
+    }
+    
+     let descripcion=form.value.descripcion;
+     console.log(form.value); 
+     console.log("khe "+(numero.length>9&&marca.length>4)+" "+numero.length+" "+marca.length);
+     
+     if (numero.length>9&&marca.length>3) {
+      this.persona.linea.marca=marca;
       this.persona.linea.numero=numero;
+      this.persona.linea.descripcion=" "+descripcion;
       //console.log(this.persona.linea); 
       //this.existente=!this.existente;
       //this.obtnerDOM("existente").checked=false;
@@ -216,14 +277,18 @@ export class UserListComponent implements OnInit {
                 'asociado!',
                 'se ha asociado la linea al usuario.',
                 'success'
-              ) 
+              ).then(result=>{
+                console.log("navergar");
+                document.location.href = 'http://localhost:4200/usuarios';
+                this.router.navigate(['/usuarios']);
+            });
             });
           }else{
             Swal.fire(
               'alerta!',
               'la liena ya esta asociada, digite una linea diferente.',
               'warning'
-            ) 
+            )
           }
         }else{
          this.persona.setLinea().subscribe(res=>{
@@ -232,14 +297,18 @@ export class UserListComponent implements OnInit {
             'asociado!',
             'se ha creado y asociado la linea al usuario.',
             'success'
-          ) 
+          ).then(result=>{
+            console.log("navergar");
+            document.location.href = 'http://localhost:4200/usuarios';
+            this.router.navigate(['/usuarios']);
+        });
          });
         } 
       });  
      }else{
       Swal.fire(
         'alerta!',
-        'el numero debe ser de 10 digitos.',
+        'el numero debe ser de 10 digitos, la marca debe tener 4 o mas caracteres.',
         'warning'
       ) 
      } 
@@ -257,15 +326,30 @@ export class UserListComponent implements OnInit {
     this.persona.personas[id].configuraciones=!this.persona.personas[id].configuraciones; 
    }
    configurarLinea(id: number){ 
+    this.getLineasPersona(false,id);
+  
+    console.log(this.existente);
+    
     this.persona.personas[id].linea=!this.persona.personas[id].linea; 
    }
     
 
    asociarLinea(persona:Persona){    
      this.persona.linea.persona=persona.cedula;
+     this.persona.linea.serial=persona._id;
+     console.log(this.persona.linea);
+    
      this.getLineasDisponibles(true);
      //console.log(this.obtnerDOMByName("cedula").value=persona.cedula); 
     //this.obtnerDOM(this.cedula+(this.num+1)).value=persona.cedula;
    }
-  
+   asociarLineaEquipo(persona:Persona){    
+    this.persona.linea.persona=persona.cedula;
+     this.getLineasPersona(true,null)
+    //console.log(this.obtnerDOMByName("cedula").value=persona.cedula); 
+   //this.obtnerDOM(this.cedula+(this.num+1)).value=persona.cedula;
+  }
+  getFacturas(){
+
+  }
 }
