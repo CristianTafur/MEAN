@@ -4,7 +4,7 @@ const linea=require('../controllers/linea.controller');
 router.get('/persona',persona.getpersonas);
 router.post('/persona',persona.createPersona);
 router.put('/persona/:id',persona.updatePersona);
-router.delete('/persona/:id/:cedula',persona.deletePersona); 
+router.delete('/persona/:id/:persona',persona.deletePersona); 
 
 router.get('/persona/linea',linea.getLineas);
 router.get('/persona/lineasDisponibles',linea.getLineasDisponibles);

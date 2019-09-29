@@ -58,15 +58,23 @@ personaCtrl.updatePersona=async (req,res)=>{
     res.json({status: 'Persona Updated'});
 }
 personaCtrl.deletePersona=async(req,res)=>{
-    const {id,cedula}=req.params;
+    const {id,persona}=req.params;
     await Persona.findByIdAndRemove(id);
-    var linea=await Linea.find({cedula});
-    console.log(linea); 
+    console.log(req.params); 
+    var linea=await Linea.find({persona});
+   
+    
+    //console.log(linea); 
     if (linea.length>0) {  
         linea=linea[0];
-        linea.persona="null";
-        linea.estado="suspendida"; 
-        await Linea.findByIdAndUpdate(linea._id,{$set:linea},{new:true});
+        linea={
+          persona:linea.persona="null",
+          estado:linea.estado="suspendida" 
+        } 
+        linea=await Linea.updateMany({persona},{$set:linea},{new:true});
+        console.log("suspendida");
+        
+        console.log(linea); 
     }  
     res.json({status: 'Persona Deleted'});
 }

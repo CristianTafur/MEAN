@@ -210,7 +210,8 @@ export class UserListComponent implements OnInit {
         if (linea!=null) {
           estado=linea.estado!="activa"; 
           if (estado) {
-            this.persona.setLinea().subscribe(res=>{
+            this.persona.setLinea().subscribe(res=>{ 
+              this.getLineasDisponibles(false);
               Swal.fire(
                 'asociado!',
                 'se ha asociado la linea al usuario.',
@@ -226,13 +227,14 @@ export class UserListComponent implements OnInit {
           }
         }else{
          this.persona.setLinea().subscribe(res=>{
+          this.getLineasDisponibles(false);
           Swal.fire(
             'asociado!',
             'se ha creado y asociado la linea al usuario.',
             'success'
           ) 
          });
-        }
+        } 
       });  
      }else{
       Swal.fire(

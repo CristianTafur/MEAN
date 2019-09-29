@@ -42,9 +42,14 @@ lineaCtrl.createLineaPersona=async(req,res)=>{
     console.log(linea);
     if (linea.length>0) {
         linea=linea[0];
-        linea.persona=persona;
-        linea.estado="activa"; 
-        linea=await Linea.findByIdAndUpdate(linea._id,{$set:linea},{new:true});
+        const id=linea._id;
+        linea={
+           persona: linea.persona=persona,
+           estado: linea.estado="activa" 
+        }  
+        console.log("actualizando");
+        console.log(linea);
+        linea=await Linea.findByIdAndUpdate(id,{$set:linea},{new:true});
         console.log("actualizado");
         console.log(linea);
         
