@@ -18,6 +18,10 @@ export class UserListFacturesComponent implements OnInit {
 
   ngOnInit() {
     this.ruta.params.subscribe(res=>{
+      try {
+         let date =res['emision'].split('T')[0];
+         let fecha=new Date(date);
+         
       console.log(res['persona']); 
       console.log(res['emision']);
       this.factura.persona=new Persona();
@@ -38,6 +42,10 @@ export class UserListFacturesComponent implements OnInit {
          this.factura.facturas=res as Factura[];
          console.log(res); 
       });
+      } catch (error) {
+        
+      }
+    
     });
   }
   

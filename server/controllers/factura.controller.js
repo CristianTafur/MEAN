@@ -18,8 +18,13 @@ facturaCtrl.getFacturasPersona=async(req,res)=>{
   const {persona,emision}=req.params;
   console.log(req.params);
   //{$and:[{persona},{estado:'activa'}]}emision:{ $gte: '1987-10-19'}
-  const facturas =await Factura.find({$and:[{persona},{emision:{ $gte: emision}}]});
-res.json(facturas)
+  var facturas=[];
+  try {
+    facturas =await Factura.find({$and:[{persona},{emision:{ $gte: emision}}]});
+  } catch (error) {
+    
+  } 
+   res.json(facturas)
 }
 facturaCtrl.getFacturas=async(req,res)=>{
     const facturas=await Factura.find();
