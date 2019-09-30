@@ -287,7 +287,7 @@ export class UserListComponent implements OnInit {
             this.getLineasDisponibles(false);
             Swal.fire(
               'alerta!',
-              'la liena ya esta asociada, digite una linea diferente.',
+              'la linea ya esta asociada, digite una linea diferente.',
               'warning'
             )
           }
@@ -324,7 +324,7 @@ export class UserListComponent implements OnInit {
         this.persona.setFactura().subscribe(res=>{
           Swal.fire({
             title: 'desea ver las facturas?',
-            text: "se se mostraran las facturas del usuario.",
+            text: "se mostraran las facturas del usuario.",
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
