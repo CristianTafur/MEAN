@@ -1,10 +1,12 @@
 const Persona=require('../models/persona'); 
 const Linea=require('../models/linea');
 const Equipo=require('../models/equipo');
+const Factura=require('../models/factura');
 const lineaCtrl={}; 
 lineaCtrl.getLineas=async(req,res)=>{ 
-    //await Linea.deleteMany(); await Equipo.deleteMany();
+   //await Linea.deleteMany(); await Equipo.deleteMany(); await Persona.deleteMany(); await Factura.deleteMany();
     const lineas=await Linea.find().select('numero persona estado');
+    //console.log("kha");
     
     res.json(lineas);
 }
@@ -22,8 +24,8 @@ lineaCtrl.getLineasPersona=async(req,res)=>{
 }
 lineaCtrl.createLinea=async(req,res)=>{
     const {numero}=req.body; //recoje los datos del json
-    console.log("entro");
-    console.log(req.body);
+    //console.log("entro");
+    //console.log(req.body);
     
    const linea=new Linea(
        {
@@ -35,11 +37,11 @@ lineaCtrl.createLinea=async(req,res)=>{
 }
 lineaCtrl.createLineaPersona=async(req,res)=>{
     const {persona,serial,marca,numero,descripcion}=req.body; //recoje los datos del json
-    console.log("entradas:");
-    console.log(req.body);
+    //console.log("entradas:");
+    //console.log(req.body);
     var linea=await Linea.find({numero});
-    console.log("linea:");
-    console.log(linea);
+    //console.log("linea:");
+    //console.log(linea);
     if (linea.length>0) {
         linea=linea[0];
         const id=linea._id;
@@ -47,11 +49,11 @@ lineaCtrl.createLineaPersona=async(req,res)=>{
            persona: linea.persona=persona,
            estado: linea.estado="activa" 
         }  
-        console.log("actualizando");
-        console.log(linea);
+      //  console.log("actualizando");
+        //console.log(linea);
         linea=await Linea.findByIdAndUpdate(id,{$set:linea},{new:true});
-        console.log("actualizado");
-        console.log(linea);
+        //console.log("actualizado");
+        //console.log(linea);
         
     }else{
         const linea = new Linea({
@@ -60,7 +62,7 @@ lineaCtrl.createLineaPersona=async(req,res)=>{
             estado:"activa"
         });
         await linea.save();
-        console.log("creado");
+        //  console.log("creado");
         
     }
     const equipo=new Equipo(
@@ -71,7 +73,7 @@ lineaCtrl.createLineaPersona=async(req,res)=>{
         estado:"no reportado"}
     );
     await equipo.save();
-    console.log("creado equipo");
+    //console.log("creado equipo");
    res.json({linea:'creada'});//envia un json 
 }
 lineaCtrl.updateLinea=async(req,res)=>{

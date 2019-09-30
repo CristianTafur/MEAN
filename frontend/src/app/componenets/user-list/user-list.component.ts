@@ -4,8 +4,8 @@ import { Persona } from 'src/app/models/persona';
 import Swal from 'sweetalert2';
 import { Linea } from 'src/app/models/linea';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { headersToString } from 'selenium-webdriver/http';
+import { Router } from '@angular/router'; 
+import { Factura } from 'src/app/models/factura';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -255,7 +255,7 @@ export class UserListComponent implements OnInit {
      console.log(form.value); 
      console.log("khe "+(numero.length>9&&marca.length>4)+" "+numero.length+" "+marca.length);
      
-     if (numero.length>9&&marca.length>3) {
+     if (numero.length>9&&marca.length>3&&marca!="undefined"&&numero!="undefined") {
       this.persona.linea.marca=marca;
       this.persona.linea.numero=numero;
       this.persona.linea.descripcion=" "+descripcion;
@@ -284,6 +284,7 @@ export class UserListComponent implements OnInit {
             });
             });
           }else{
+            this.getLineasDisponibles(false);
             Swal.fire(
               'alerta!',
               'la liena ya esta asociada, digite una linea diferente.',
@@ -312,6 +313,48 @@ export class UserListComponent implements OnInit {
         'warning'
       ) 
      } 
+   }
+   setFactura(form?: NgForm){
+    console.log(form.value); 
+    let valor=form.value.valor;
+   
+    if (valor) {
+      if (valor>999) {
+        this.persona.factura.valor=valor;
+        this.persona.setFactura().subscribe(res=>{
+          Swal.fire({
+            title: 'desea ver las facturas?',
+            text: "se se mostraran las facturas del usuario.",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, ver esto!',
+            cancelButtonText:'cancelar'
+          }).then(result=>{
+            if (result.value) {
+              let factura=<Factura>res;
+              document.location.href = 'http://localhost:4200/usuarios/facturas/'+factura.persona+'/'+factura.emision; 
+            }else{
+             // document.location.href = 'http://localhost:4200/usuarios';
+            }  
+        });
+        });
+       
+      }else{
+        Swal.fire(
+          'alerta!',
+          'el valor de la factura debe ser mayor a 999',
+          'warning'
+        ) 
+      } 
+    }else{
+      Swal.fire(
+        'alerta!',
+        'el valor de la factura debe ser mayor a 999',
+        'warning'
+      ) 
+    }    
    }
   obtnerDOM(id :string){ 
     return (<HTMLInputElement>document.getElementById(id)); 
@@ -349,7 +392,15 @@ export class UserListComponent implements OnInit {
     //console.log(this.obtnerDOMByName("cedula").value=persona.cedula); 
    //this.obtnerDOM(this.cedula+(this.num+1)).value=persona.cedula;
   }
-  getFacturas(){
+   asociarFactura(persona:Persona){
+    this.persona.getLineasPersona(persona.cedula).subscribe(res=>{
+      this.persona.lineas=res as Linea[]; 
+      this.persona.lineas.forEach(linea => {
+        this.persona.factura.persona=linea.persona;
+         this.persona.factura.linea=linea.numero;
+      });
+    });
+     
 
-  }
+   }  
 }

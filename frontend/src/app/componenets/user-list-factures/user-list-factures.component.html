@@ -1,1 +1,64 @@
-<p>user-list-factures works!</p>
+<br><br><br>
+<div class="container-fluid ">
+       <div class="row">
+           <div class="col-md-4 col-sd-4 col-xs-12"></div>
+           <div class="col-md-4 col-sd-4 col-xs-12">
+           <!--formulario inicio-->
+
+           <form  action="/ingresar" method="post" class="form-container">
+               <h1> Informcacion</h1>
+               <div class="form-group">
+                  Nombre:
+                  <p class="form-control">{{factura.persona.nombre}}</p>
+               </div>
+               <div class="form-group">
+                Apellido:
+                <p class="form-control">{{factura.persona.apellido}}</p>
+                </div>
+                <div class="form-group">
+                    Cedula:
+                <p class="form-control">{{factura.persona.cedula}}</p>
+                </div>
+                <div class="form-group">
+                 Linea:
+                <p class="form-control">{{factura.linea.numero}}</p>
+                </div>
+                <div class="form-group">
+                        <input id="date" class="form-control" type="date" value={{factura.factura.emision}} required>
+                        <button class="btn btn-outline-primary m-2 btn-block" (click)="cosultar()">consultar</button>
+                </div>
+             </form> 
+           <!--formulario final-->
+           </div>
+           <div class="col-md-4 col-sd-4 col-xs-12"></div>
+       </div>
+   </div>
+   <br><br>
+   
+   <div class="row">
+       <div class="col-12">
+          
+           <div class="container">
+               
+               <table class="table">
+                    <thead  class="thead-dark" align="center">
+                        <tr><th>numero</th> 
+                         <th>Fecha</th> 
+                         <th>valor</th> 
+                         <th>configurar</th></tr> 
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let value of factura.facturas">
+                            <td><p>{{value.numero}}</p></td>
+                            <td><p>{{value.emision}}</p></td>
+                            <td><p>{{value.valor}}</p></td>
+                            <td><button class="btn btn-outline-danger m-2 btn-block" (click)="deleteFactura(value._id)"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+               </table>
+           </div>
+       </div>
+   </div>
+
+    
+         

@@ -62,7 +62,7 @@
 
                                     <button  id={{modal}}{{i}} *ngIf="value.linea&&!value.poseeLinea" class="btn btn-outline-warning m-2 btn-block" data-toggle="modal" data-target="#mimodal1" (click)="asociarLinea(value)"> <i class="fas fa-handshake"></i></button>
 
-                                    <button id={{modal}}{{i}} *ngIf="value.linea&&value.poseeLinea" class="btn btn-outline-success m-2 btn-block" data-toggle="modal" data-target="#mimodal2"> <i class="fas fa-dollar-sign"></i></button>
+                                    <button id={{modal}}{{i}} *ngIf="value.linea&&value.poseeLinea" class="btn btn-outline-success m-2 btn-block" data-toggle="modal" data-target="#mimodal2" (click)="asociarFactura(value)"> <i class="fas fa-dollar-sign"></i></button>
 
                                     <button *ngIf="!value.estado&&value.configuraciones" class="btn btn-outline-primary m-2 btn-block" (click)="editar(i)"> <i class="fas fa-edit"></i></button>
 
@@ -128,7 +128,29 @@
                     </div>
                 </div>
             </div> 
-          
+            <div class="modal modal-fixed-footer" id="mimodal2">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        
+                        <div class="modal-header">
+                            <h4 class="modal-title">Generar factura</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div> 
+                    <form #factura="ngForm" (ngSubmit)="setFactura(factura)"> 
+                        <div class="modal-body">
+                        <label for="persona">Valor: </label>
+                        <input type="number" class="form-control" name="valor" #name="ngModel" [(ngModel)]="persona.factura.valor">
+                       </div> 
+                        <div  class="modal-footer">
+                       
+                            <button  class="btn btn-success">Generar</button>
+                           
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div> 
+                    </form>
+                    </div>
+                </div>
+            </div> 
         </div>
    </div>
 </div>

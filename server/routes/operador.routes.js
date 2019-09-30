@@ -2,22 +2,30 @@ const router=require('express').Router();
 const persona=require('../controllers/persona.controller');
 const linea=require('../controllers/linea.controller');
 const equipo=require('../controllers/equipo.controller');
+const factura=require('../controllers/factura.controller');
 
-router.get('/persona',persona.getpersonas);
-router.post('/persona',persona.createPersona);
-router.put('/persona/:id',persona.updatePersona);
-router.delete('/persona/:id/:persona',persona.deletePersona); 
+router.get('/getpersona/:cedula',persona.getpersona);
+router.get('/getpersonas',persona.getpersonas);
+router.post('/createPersona',persona.createPersona);
+router.put('/updatePersona/:id',persona.updatePersona);
+router.delete('/deletePersona/:id/:persona',persona.deletePersona); 
 
-router.get('/persona/linea',linea.getLineas);
-router.get('/persona/lineasDisponibles',linea.getLineasDisponibles);
-router.get('/persona/lineasPersona/:persona',linea.getLineasPersona);
+router.get('/getLineas',linea.getLineas);
+router.get('/getLineasDisponibles',linea.getLineasDisponibles);
+router.get('/getLineasPersona/:persona',linea.getLineasPersona);
 
-router.post('/persona/linea',linea.createLineaPersona); 
-router.get('/persona/liena/:cedula',linea.getLineasPersona);
-router.put('/persona/linea/:id',linea.updateLinea);
+router.post('/createLineaPersona',linea.createLineaPersona); 
+router.get('/getLineasPersona/:cedula',linea.getLineasPersona);
+router.put('/.updateLinea/:id',linea.updateLinea);
 
-router.post('/linea',linea.createLinea); 
+router.post('/createLinea',linea.createLinea); 
 
-router.get('/persona/equipo',equipo.getEquipos)
-router.get('/persona/equiposDisponibles',equipo.getEquiposDisponibles);
+router.get('/getEquipos',equipo.getEquipos)
+router.get('/getEquiposDisponibles',equipo.getEquiposDisponibles);
+
+router.get('/getFacturas',factura.getFacturas);
+router.get('/getFacturasPersona/:persona/:emision',factura.getFacturasPersona);
+router.post('/createFacturaPersona',factura.createFacturaPersona);
+router.delete('/deleteFacturaPersona/:id',factura.deleteFacturaPersona);
+
 module.exports=router;

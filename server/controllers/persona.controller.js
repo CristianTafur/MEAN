@@ -35,10 +35,12 @@ personaCtrl.createPersona=async(req,res)=>{
     res.json(persona);//envia un json 
 }
 personaCtrl.getpersona=async (req,res)=>{
-    const {cedula} =req.body;
-    const persona = await Persona.findById(cedula);
-    res.json(persona);
-
+    const {cedula} =req.params;
+    console.log(req.params);
+    const persona = await Persona.find({cedula}); 
+    console.log(persona);
+    
+    res.json(persona); 
 } 
 personaCtrl.updatePersona=async (req,res)=>{
     const {id}=req.params;//obtiene los parametros de la ruta
