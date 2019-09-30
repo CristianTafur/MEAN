@@ -1,7 +1,9 @@
 # MEAN
+```
 instalacion de mongoDB: https://www.youtube.com/watch?v=gkCnXcxHC4o
-
-# comandos impornates:
+intsalacion de node.js: https://www.youtube.com/watch?v=2fR-_DAjJgM
+```
+# comandos importantes:
 ```
 mongod (inicia mongoDB en un puerto)
 npm i (descarga las dependecias del proyecto, hacer por cada carpeta frontend y server)
